@@ -25,7 +25,10 @@ public static class IServiceCollectionExtension
         Type serviceAttributeType = typeof(ServiceAttribute);
         foreach (var type in types)
         {
-            if (type.IsTypeToRegister() && (predicate?.Invoke(type) ?? true))
+            if (type.IsInterface is false && 
+                type.IsAbstract is false && 
+                type.IsDefined(serviceAttributeType) && 
+                (predicate?.Invoke(type) ?? true))
             {
                 var attribute = type.GetCustomAttribute(serviceAttributeType) as ServiceAttribute;
                 Type interfaceType = attribute!.InterfaceType ?? type;
